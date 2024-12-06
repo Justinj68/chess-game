@@ -1,42 +1,72 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* App.css */
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Prend toute la hauteur de l'écran */
   }
-  to {
-    transform: rotate(360deg);
+  
+  div {
+    text-align: center;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  
+  h1 {
+    font-size: 5rem;
+    color: white;
+    transition: transform 0.3s ease;
   }
-}
+  
+  h1:hover {
+    transform: scale(1.05); /* Grossit légèrement (10%) au survol */
+  }
 
-.card {
-  padding: 2em;
-}
+  button.play-button {
+    margin-top: 5px;
+    padding: 8px 20px;
+    font-size: 1.5rem;
+    color: rgb(255, 255, 255);
+    background-color: #777777;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+  
+  button.play-button:hover {
+    background-color: #bababa; /* Couleur plus sombre au survol */
+    transform: scale(1.1); /* Grossissement léger au survol */
+  }
+  
+  button.play-button:active {
+    transform: scale(1); /* Reviens à la taille normale quand on clique */
+    background-color: #ffffff; /* Couleur encore plus sombre */
+  }
 
-.read-the-docs {
-  color: #888;
-}
+  .github-link {
+    position: absolute; /* Positionner par rapport au parent (body) */
+    bottom: 20px; /* 20px du bas de la page */
+    right: 20px;  /* 20px du bord droit */
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: rgb(255, 255, 255);  /* Couleur du texte */
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  .github-link:hover {
+    transform: scale(1.1); /* Grossissement léger au survol */
+  }
+  
+  .github-link span {
+    font-size: 1.2rem;
+  }
+
+
+
+.github-logo {
+    width: 20px;  /* Réduire la taille du logo */
+    height: 20px;
+    margin-right: 10px;  /* Un peu d'espace entre le logo et le texte */
+  }
+  

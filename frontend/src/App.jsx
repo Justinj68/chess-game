@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import ChessBoard from './components/ChessBoard';
+import { useState } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [gameStarted, setGameStarted] = useState(false);
+  const handlePlayClick = () => {
+    setGameStarted(true);
+  };
+
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <h1>Chess Game</h1>
+
+      {!gameStarted ?
+        (<button className="play-button" onClick={handlePlayClick}>PLAY AS GUEST</button>)
+        :
+        (<ChessBoard />)
+      }
+      
+      <a 
+        href="https://github.com/Justinj68" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="github-link"
+      >
+        <img 
+          src="https://img.icons8.com/ios11/512/FFFFFF/github.png" 
+          alt="GitHub Logo"
+          className="github-logo"
+        />
+        <span>Justinj68</span>
+      </a>
+    </div>
+  );
 }
 
-export default App
+export default App;

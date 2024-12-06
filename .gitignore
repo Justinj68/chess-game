@@ -1,0 +1,100 @@
+## FRONTEND
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs
+*.log
+logs/
+
+# Build output
+dist/
+build/
+
+# Dependency directories
+/.pnp
+.pnp.js
+
+# Vite cache
+.vite/
+
+# Local environment settings
+.env
+.env.local
+.env.*.local
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Tailwind CSS
+.postcssrc
+.tailwindcss
+
+
+
+## BACKEND
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+mvnw
+mvnw.cmd
+.idea/
+.project
+.classpath
+.settings/
+
+# Gradle
+.gradle/
+build/
+
+# Log files
+*.log
+
+# H2 Database
+*.h2.db
+
+# IntelliJ IDEA (ou autres IDE)
+.idea/
+*.iml
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# NetBeans
+nbproject/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# Temporary files
+*.swp
+*.swo
+*.bak
+*.tmp

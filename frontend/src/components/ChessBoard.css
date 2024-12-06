@@ -1,0 +1,27 @@
+/* ChessBoard.css */
+.chessboard {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr); /* Définir 8 colonnes égales */
+    grid-template-rows: repeat(8, 1fr);    /* Définir 8 lignes égales */
+    width: 400px;  /* Taille de l'échiquier */
+    height: 400px; /* Taille de l'échiquier */
+    margin: 20px auto;
+  }
+  
+  .square {
+    width: 100%;  /* Chaque case occupe 100% de l'espace de la colonne */
+    height: 100%; /* Chaque case occupe 100% de l'espace de la ligne */
+  }
+  
+  .white {
+    background-color: #c1c1c1;
+  }
+  
+  .black {
+    background-color: #000000;
+  }
+
+  .square:hover {
+    transform: scale(1.05);
+  }
+  
