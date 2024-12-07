@@ -4,24 +4,40 @@
     grid-template-columns: repeat(8, 1fr); /* Définir 8 colonnes égales */
     grid-template-rows: repeat(8, 1fr);    /* Définir 8 lignes égales */
     width: 400px;  /* Taille de l'échiquier */
-    height: 400px; /* Taille de l'échiquier */
+    height: auto; /* Taille de l'échiquier */
     margin: 20px auto;
+    aspect-ratio: 1;
   }
   
   .square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Si nécessaire pour les ajustements */
     width: 100%;  /* Chaque case occupe 100% de l'espace de la colonne */
-    height: 100%; /* Chaque case occupe 100% de l'espace de la ligne */
+    aspect-ratio: 1;
   }
-  
+
+
+
   .white {
-    background-color: #c1c1c1;
+    background-color: #e7ccae;
   }
   
   .black {
-    background-color: #000000;
+    background-color: #683c13;
   }
 
   .square:hover {
     transform: scale(1.05);
+    z-index: 1;
   }
-  
+
+  .piece {
+    max-width: 70%;
+    max-height: 70%;
+    width: 70%;  /* Ajustez la taille de l'image pour qu'elle s'intègre bien */
+    height: auto; /* Conserve le ratio d'aspect */
+    pointer-events: none; /* Empêche de cliquer sur l'image */
+    object-fit: contain;
+}

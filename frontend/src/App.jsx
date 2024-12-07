@@ -14,7 +14,7 @@ function App() {
       <h1>Chess Game</h1>
 
       {!gameStarted ?
-        (<button className="play-button" onClick={handlePlayClick}>PLAY AS GUEST</button>)
+        (<button className="play-button" onClick={handlePlayClick}>PLAY</button>)
         :
         (<ChessBoard />)
       }
