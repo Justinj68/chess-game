@@ -16,6 +16,7 @@
     position: relative; /* Si nécessaire pour les ajustements */
     width: 100%;  /* Chaque case occupe 100% de l'espace de la colonne */
     aspect-ratio: 1;
+    transition: transform 0.1s ease;
   }
 
 
@@ -29,9 +30,10 @@
   }
 
   .square:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
     z-index: 1;
   }
+
 
   .piece {
     max-width: 70%;
@@ -40,4 +42,10 @@
     height: auto; /* Conserve le ratio d'aspect */
     pointer-events: none; /* Empêche de cliquer sur l'image */
     object-fit: contain;
+}
+
+.selected {
+  outline: 1px solid rgb(34, 183, 59); /* Exemple */
+  z-index: 2;
+  box-shadow: 0 0 10px rgb(34, 183, 59); /* Effet lumineux */
 }

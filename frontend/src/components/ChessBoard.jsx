@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ChessBoard.css';
 
 function parseFEN(fen) {
@@ -41,18 +41,31 @@ function ChessBoard({ fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" }) {
         return `./src/assets/pieces/${color}_${pieceType}.png`;
     };
 
+    const [selectedPiece, setSelectedPiece] = useState(null);
+
+    const handleSquareClick = (row, col) => {
+        if (chessBoard[col][row] !== "") {
+            setSelectedPiece({ row, col });
+        }
+    };
+
     const generateBoard = () => {
         let board = [];
-        for (let row = 0; row < 8; row++) {
+        for (let row = 0; row < 8; row++) { // Boucle des colonnes
             let rowCells = [];
-            for (let col = 0; col < 8; col++) {
-                const isWhite = (row + col) % 2 === 0;
-                const piece = chessBoard[row][col]; // Récupérer la pièce de la case
-
+            for (let col = 0; col < 8; col++) { // Boucle des lignes
+                const isWhite = (row + col) % 2 === 0; // Couleur des cases
+                const piece = chessBoard[col][row]; // Inversion des indices
+    
                 rowCells.push(
                     <div
-                        key={`${row}-${col}`}
-                        className={`square ${isWhite ? 'white' : 'black'}`}
+                        key={`${col}-${row}`}
+                        className={`
+                            square 
+                            ${isWhite ? 'white' : 'black'} 
+                            ${selectedPiece && selectedPiece.row === row && selectedPiece.col === col ? 'selected' : ''}
+                        `}
+                        onClick={() => handleSquareClick(row, col)}
                     >
                         {piece && (
                             <img
@@ -72,9 +85,9 @@ function ChessBoard({ fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" }) {
         }
         return board;
     };
+    
 
     return <div className="chessboard">{generateBoard()}</div>;
 }
-
 
 export default ChessBoard;
