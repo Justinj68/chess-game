@@ -7,6 +7,7 @@
     height: auto; /* Taille de l'échiquier */
     margin: 20px auto;
     aspect-ratio: 1;
+    user-select: none;
   }
   
   .square {
@@ -17,9 +18,33 @@
     width: 100%;  /* Chaque case occupe 100% de l'espace de la colonne */
     aspect-ratio: 1;
     transition: transform 0.1s ease;
+    box-shadow: 0 0 10px rgb(234, 70, 225); /* Ombre initiale */
+    animation: rainbow-shadow 2s infinite linear; /* Ajout de l'animation */
   }
 
-
+  @keyframes rainbow-shadow {
+    0% {
+        box-shadow: 0 0 10px rgb(234, 70, 225); /* Rose */
+    }
+    16% {
+        box-shadow: 0 0 10px rgb(255, 0, 0); /* Rouge */
+    }
+    33% {
+        box-shadow: 0 0 10px rgb(255, 165, 0); /* Orange */
+    }
+    50% {
+        box-shadow: 0 0 10px rgb(255, 255, 0); /* Jaune */
+    }
+    66% {
+        box-shadow: 0 0 10px rgb(0, 128, 0); /* Vert */
+    }
+    83% {
+        box-shadow: 0 0 10px rgb(0, 0, 255); /* Bleu */
+    }
+    100% {
+        box-shadow: 0 0 10px rgb(234, 70, 225); /* Retour au rose */
+    }
+}
 
   .white {
     background-color: #e7ccae;
@@ -42,10 +67,16 @@
     height: auto; /* Conserve le ratio d'aspect */
     pointer-events: none; /* Empêche de cliquer sur l'image */
     object-fit: contain;
+    user-select: none;
 }
 
 .selected {
   outline: 1px solid rgb(34, 183, 59); /* Exemple */
   z-index: 2;
   box-shadow: 0 0 10px rgb(34, 183, 59); /* Effet lumineux */
+}
+
+.highlighted {
+  z-index: 2;
+  box-shadow: 0 0 10px rgb(215, 215, 26); /* Effet lumineux */
 }

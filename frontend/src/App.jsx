@@ -2,12 +2,12 @@ import './App.css'
 import ChessBoard from './components/ChessBoard';
 import { useState } from 'react';
 
+
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const handlePlayClick = () => {
     setGameStarted(true);
   };
-
 
   return (
     <div>
