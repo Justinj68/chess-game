@@ -26,7 +26,7 @@ public class ChessController {
     public List<String> getPossibleMoves(
             @RequestParam int row,
             @RequestParam int col,
-            @RequestParam String piece) {
+            @RequestParam char piece) {
         System.out.println("Request received for piece: " + piece + " at (" + row + ", " + col + ")");
         List<String> possibleMoves = chessEngine.getPossibleMoves(row, col, piece);
         System.out.println("Possible moves: " + possibleMoves);

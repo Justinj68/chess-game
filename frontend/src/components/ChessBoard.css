@@ -18,8 +18,8 @@
     width: 100%;  /* Chaque case occupe 100% de l'espace de la colonne */
     aspect-ratio: 1;
     transition: transform 0.1s ease;
-    box-shadow: 0 0 10px rgb(234, 70, 225); /* Ombre initiale */
-    animation: rainbow-shadow 2s infinite linear; /* Ajout de l'animation */
+    box-shadow: 0 0 10px rgb(234, 70, 225);
+    animation: rainbow-shadow 2s infinite linear;
   }
 
   @keyframes rainbow-shadow {
@@ -56,7 +56,7 @@
 
   .square:hover {
     transform: scale(1.1);
-    z-index: 1;
+    z-index: 10;
   }
 
 
@@ -72,11 +72,25 @@
 
 .selected {
   outline: 1px solid rgb(34, 183, 59); /* Exemple */
-  z-index: 2;
+  z-index: 5;
   box-shadow: 0 0 10px rgb(34, 183, 59); /* Effet lumineux */
 }
 
 .highlighted {
   z-index: 2;
-  box-shadow: 0 0 10px rgb(215, 215, 26); /* Effet lumineux */
+  position: relative; /* Nécessaire pour positionner le cercle par rapport à l'élément */
+}
+
+.highlighted::after {
+  content: ''; /* Permet d'ajouter un élément visuel */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 35%; /* Ajustez la taille selon vos besoins */
+  height: 35%;
+  background-color: rgba(0, 0, 0, 0.5); /* Cercle noir transparent */
+  border-radius: 50%; /* Transforme l'élément en cercle */
+  transform: translate(-50%, -50%); /* Centrer le cercle par rapport à l'élément */
+  pointer-events: none; /* Permet de ne pas bloquer les interactions avec l'élément */
+  z-index: -1; /* Place le cercle derrière l'élément */
 }

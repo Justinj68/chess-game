@@ -46,7 +46,7 @@ async function fetchPossiblesMoves(row, col, piece) {
             params: {
             row: row,
             col: col,
-            piece: new String(piece), // Ton type de pièce
+            piece: piece, // Ton type de pièce
             },
             headers: {
                 'Content-Type': 'application/json',

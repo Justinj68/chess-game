@@ -19,7 +19,7 @@ function App() {
         (<ChessBoard />)
       }
       
-      <a 
+      {/* <a 
         href="https://github.com/Justinj68" 
         target="_blank" 
         rel="noopener noreferrer" 
@@ -31,7 +31,7 @@ function App() {
           className="github-logo"
         />
         <span>Justinj68</span>
-      </a>
+      </a> */}
     </div>
   );
 }
