@@ -24,7 +24,6 @@ function parseFEN(fen) {
 }
 
 
-
 function getPieceImage(piece) {
     const pieceMap = {
         'r': 'rook',
@@ -46,7 +45,7 @@ async function fetchPossiblesMoves(row, col, piece) {
             params: {
             row: row,
             col: col,
-            piece: piece, // Ton type de pièce
+            piece: piece,
             },
             headers: {
                 'Content-Type': 'application/json',
@@ -60,21 +59,30 @@ async function fetchPossiblesMoves(row, col, piece) {
     }
 }
 
-function ChessBoard({ fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" }) {
+async function fetchBoard() {
+    try {
+        const response = await axios.get('http://localhost:8080/api/game')
+    } catch (error) {
+        console.error('Error while getting the game board:', error);
+    }
+    
+}
+
+function ChessBoard({ fen = "rnbqkbnr/8/3K4/p1p1p1p1/1P1P1P1P/8/8/RNBQKBNR" }) {
     const chessBoard = parseFEN(fen);
     const [selectedPiece, setSelectedPiece] = useState(null);
     const [possibleMoves, setPossibleMoves] = useState([]);
 
     const handleMouseDown = async (row, col) => {
-        const piece = chessBoard[col][row];
+        const piece = chessBoard[row][col];
         if (piece !== "") {
             setSelectedPiece({ row, col });
             try {
                 const moves = await fetchPossiblesMoves(row, col, piece);
-                setPossibleMoves(moves || []); // Safeguard in case moves is null/undefined
+                setPossibleMoves(moves || []);
             } catch (error) {
                 console.error("Failed to fetch possible moves:", error);
-                setPossibleMoves([]); // Reset to an empty array in case of error
+                setPossibleMoves([]);
             }
         } else {
             setSelectedPiece(null);
@@ -88,14 +96,14 @@ function ChessBoard({ fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" }) {
             let rowCells = [];
             for (let col = 0; col < 8; col++) {
                 const isWhite = (row + col) % 2 === 0;
-                const piece = chessBoard[col][row];
+                const piece = chessBoard[row][col];
                 const highlighted = possibleMoves.some(
                     (move) => move === row.toString() + col.toString()
-                ); // Safely check if the cell is highlighted
+                );
     
                 rowCells.push(
                     <div
-                        key={`${col}-${row}`}
+                        key={`${row}-${col}`}
                         className={`
                             square 
                             ${isWhite ? 'white' : 'black'} 
@@ -122,8 +130,6 @@ function ChessBoard({ fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" }) {
         }
         return board;
     };
-    
-
     return <div className="chessboard">{generateBoard()}</div>;
 }
 

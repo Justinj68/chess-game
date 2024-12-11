@@ -1,8 +1,8 @@
 /* ChessBoard.css */
 .chessboard {
     display: grid;
-    grid-template-columns: repeat(8, 1fr); /* Définir 8 colonnes égales */
-    grid-template-rows: repeat(8, 1fr);    /* Définir 8 lignes égales */
+    grid-template-rows: repeat(8, 1fr); /* Définir 8 colonnes égales */
+    grid-template-columns: repeat(8, 1fr);    /* Définir 8 lignes égales */
     width: 400px;  /* Taille de l'échiquier */
     height: auto; /* Taille de l'échiquier */
     margin: 20px auto;
@@ -88,9 +88,9 @@
   left: 50%;
   width: 35%; /* Ajustez la taille selon vos besoins */
   height: 35%;
-  background-color: rgba(0, 0, 0, 0.5); /* Cercle noir transparent */
+  background-color: rgba(255, 0, 0, 0.5); /* Cercle noir transparent */
   border-radius: 50%; /* Transforme l'élément en cercle */
   transform: translate(-50%, -50%); /* Centrer le cercle par rapport à l'élément */
   pointer-events: none; /* Permet de ne pas bloquer les interactions avec l'élément */
-  z-index: -1; /* Place le cercle derrière l'élément */
+  z-index: 20; /* Place le cercle derrière l'élément */
 }
