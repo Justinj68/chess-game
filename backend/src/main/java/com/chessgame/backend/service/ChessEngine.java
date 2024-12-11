@@ -76,11 +76,11 @@ public class ChessEngine {
                 if ((direction == -1 && row == 6) || (direction == 1 && row == 1) && chessBoard.isEmpty(row + 2 * direction, col)) {
                     possibleMoves.add(coordinatesToPosition(row + 2 * direction, col));
                 }
-            }
-            if (canKill(row + direction, col + 1, piece)) {
+            } 
+            if (col < 7 && !chessBoard.isEmpty(row + direction, col + 1) && canKill(row + direction, col + 1, piece)) {
                 possibleMoves.add(coordinatesToPosition(row + direction, col + 1));
             }
-            if (canKill(row + direction, col - 1, piece)) {
+            if (col > 0 && !chessBoard.isEmpty(row + direction, col - 1) && canKill(row + direction, col - 1, piece)) {
                 possibleMoves.add(coordinatesToPosition(row + direction, col - 1));
             }
         }
@@ -212,7 +212,7 @@ public class ChessEngine {
             return false;
         }
         char victim = chessBoard.getPieceAtPosition(row, col);
-        if (victim == '\0' || areSameTeam(piece, victim)) {
+        if (areSameTeam(piece, victim)) {
             return false;
         }
         return true;
