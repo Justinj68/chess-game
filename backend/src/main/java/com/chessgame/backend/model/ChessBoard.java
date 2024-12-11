@@ -1,7 +1,6 @@
 package com.chessgame.backend.model;
 
 public class ChessBoard {
-
     private char[][] board;
     public static final int SIZE = 8;
 
@@ -61,6 +60,10 @@ public class ChessBoard {
     }
 
     public String toFEN() {
+        return toFEN(this.board);
+    }
+
+    public static String toFEN(char[][] board) {
         StringBuilder fen = new StringBuilder();
 
         for (int i = 0; i < SIZE; i++) {

@@ -10,7 +10,7 @@ import java.util.List;
 public class ChessEngine {
 
     private final int SIZE = ChessBoard.SIZE;
-    private ChessBoard chessBoard = new ChessBoard("rnbqkbnr/8/3K4/p1p1p1p1/1P1P1P1P/8/8/RNBQKBNR");
+    private ChessBoard chessBoard = new ChessBoard("rnbqkbnr/1p6/3K4/p7/1p1P1P1P/8/8/RNBQKBNR");
     private boolean[][] threats;
 
     private void refreshThreats(String color) {
@@ -208,11 +208,11 @@ public class ChessEngine {
     }
 
     public boolean canKill(int row, int col, char piece) {
-        if (row < 0 || row > 7 || col < 0 || col > 7) {
+        if (row < 0 || row > SIZE - 1 || col < 0 || col > SIZE - 1) {
             return false;
         }
         char victim = chessBoard.getPieceAtPosition(row, col);
-        if (areSameTeam(piece, victim)) {
+        if (victim == '\0' || areSameTeam(piece, victim)) {
             return false;
         }
         return true;
@@ -235,11 +235,11 @@ public class ChessEngine {
     private List<String> getPawnAttackRange(int row, int col, char piece) {
         List<String> attackZone = new ArrayList<>();
         int direction = Character.isUpperCase(piece) ? -1 : 1;
-        if (row > 0 && row < 7) {
-            if (canKill(row + direction, col + 1, piece)) {
+        if (row > 0 && row < SIZE - 1) {
+            if (col < 7) {
                 attackZone.add(coordinatesToPosition(row + direction, col + 1));
             }
-            if (canKill(row + direction, col - 1, piece)) {
+            if (col > 0) {
                 attackZone.add(coordinatesToPosition(row + direction, col - 1));
             }
         }
