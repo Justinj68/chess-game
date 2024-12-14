@@ -17,7 +17,6 @@ public class ControlMap {
         this.chessBoard = chessBoard;
         this.controlMaps = new EnumMap<>(Team.class);
         refreshControlMaps();
-        diplay();
     }
 
     public void refreshControlMaps() {
@@ -120,31 +119,5 @@ public class ControlMap {
             return false;
         }
         return controlMaps.get(team)[row][col];
-    }
-
-    public void diplay() {
-        System.out.println("White-controlled area:\n");
-        for (int row = 0; row < SIZE; row++) {
-            for (int col = 0; col < SIZE; col++) {
-                if (controlMaps.get(Team.WHITE)[col][row]) {
-                    System.out.print(" W ");
-                } else {
-                    System.out.print(" - ");
-                }
-            }
-            System.out.println("\n");
-        }
-
-        System.out.println("Black-controlled area:\n");
-        for (int row = 0; row < SIZE; row++) {
-            for (int col = 0; col < SIZE; col++) {
-                if (controlMaps.get(Team.BLACK)[col][row]) {
-                    System.out.print(" B ");
-                } else {
-                    System.out.print(" - ");
-                }
-            }
-            System.out.println("\n");
-        }
     }
 }
