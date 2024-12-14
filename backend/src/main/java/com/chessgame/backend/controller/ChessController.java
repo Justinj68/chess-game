@@ -1,5 +1,6 @@
 package com.chessgame.backend.controller;
 
+import com.chessgame.backend.domain.Piece;
 import com.chessgame.backend.service.ChessEngine;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class ChessController {
             @RequestParam int col,
             @RequestParam char piece) {
         System.out.println("Request received for piece: " + piece + " at (" + row + ", " + col + ")");
-        List<String> possibleMoves = chessEngine.getPossibleMoves(row, col, piece);
+        List<String> possibleMoves = chessEngine.getValidMoves(row, col, new Piece(piece));
         System.out.println("Possible moves: " + possibleMoves);
         return possibleMoves;
     }

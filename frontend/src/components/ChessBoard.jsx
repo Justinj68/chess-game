@@ -68,7 +68,7 @@ async function fetchBoard() {
     
 }
 
-function ChessBoard({ fen = "rnbqkbnr/1p6/3K4/p7/1p1P1P1P/8/8/RNBQKBNR" }) {
+function ChessBoard({ fen = "1RR1K2Q/5P2/6b1/2r5/3q4/2kr4/6N1/8" }) {
     const chessBoard = parseFEN(fen);
     const [selectedPiece, setSelectedPiece] = useState(null);
     const [possibleMoves, setPossibleMoves] = useState([]);
