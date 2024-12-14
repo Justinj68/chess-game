@@ -13,30 +13,13 @@ public class ChessBoard {
         this.board = new Piece[SIZE][SIZE];
         this.kingPositions = new EnumMap<>(Team.class);
         initializeBoardFromFEN(fen);
-        printKingPositions();
     }
 
     public ChessBoard() {
         this.board = new Piece[SIZE][SIZE];
         this.kingPositions = new EnumMap<>(Team.class);
         initializeBoardFromFEN(fenStart);
-        printKingPositions();
     }
-
-    public void printKingPositions() {
-        if (kingPositions == null || kingPositions.isEmpty()) {
-            System.out.println("Aucune position de roi à afficher.");
-            return;
-        }
-    
-        System.out.println("Positions des rois :");
-        for (Map.Entry<Team, String> entry : kingPositions.entrySet()) {
-            Team team = entry.getKey();
-            String position = entry.getValue();
-            System.out.println("Équipe : " + team.name() + " | Position du roi : " + position);
-        }
-    }
-    
 
     private void initializeBoardFromFEN(String fen) {
         String[] rows = fen.split("/");
