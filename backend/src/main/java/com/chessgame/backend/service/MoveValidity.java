@@ -8,11 +8,8 @@ import com.chessgame.backend.domain.Piece;
 
 public class MoveValidity {
     private final ChessBoard chessBoard;
-    private final ControlMap controlMap;
-
-    public MoveValidity(ChessBoard chessBoard, ControlMap controlMap) {
+    public MoveValidity(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
-        this.controlMap = controlMap;
     }
 
     public List<String> getPieceValidMoves(int row, int col, Piece piece) {
@@ -75,11 +72,11 @@ public class MoveValidity {
         for (int[] vector : vectors) {
             int currentRow = row + vector[0];
             int currentCol = col + vector[1];
-            if (ChessBoard.isOutsideBoard(currentRow, currentCol) || !canLegallyMoveTo(row, col, currentRow, currentCol)) {
-                continue;
-            }
             while (!ChessBoard.isOutsideBoard(currentRow, currentCol)) {
                 Piece currentPiece = chessBoard.getPiece(currentRow, currentCol);
+                if (!canLegallyMoveTo(row, col, currentRow, currentCol)) {
+                    break;
+                }
                 if (currentPiece == null || (!piece.areSameTeam(currentPiece) && !currentPiece.isKing())) {
                     validMoves.add(coordinatesToPosition(currentRow, currentCol));
                 }
@@ -138,19 +135,16 @@ public class MoveValidity {
 
     public boolean isMoveValid(int oldRow, int oldCol, int newRow, int newCol) {
         Piece piece = chessBoard.getPiece(oldRow, oldCol);
-        List<String> validMoves = getPieceValidMoves(newRow, newCol, piece);
+        List<String> validMoves = getPieceValidMoves(oldRow, oldCol, piece);
         String newPosition = coordinatesToPosition(newRow, newCol);
         return validMoves.contains(newPosition);
     }
 
     public boolean canLegallyMoveTo(int oldRow, int oldCol, int newRow, int newCol) {
-        Piece piece = chessBoard.getPiece(oldRow, oldCol);
-        if (piece.isKing()) {
-            return !controlMap.isControlledBy(newRow, newCol, piece.getEnemyTeam());
-        }
         ChessBoard simulationBoard = chessBoard.clone();
         simulationBoard.movePiece(oldRow, oldCol, newRow, newCol);
         ControlMap simulationControlMap = new ControlMap(simulationBoard);
+        Piece piece = chessBoard.getPiece(oldRow, oldCol);
         String kingPosition = simulationBoard.getKingPosition(piece.getTeam());
         int kingRow = positionToRow(kingPosition);
         int kingCol = positionToCol(kingPosition);

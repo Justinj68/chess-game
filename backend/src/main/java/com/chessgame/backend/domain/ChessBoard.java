@@ -78,7 +78,7 @@ public class ChessBoard {
             for (int j = 0; j < SIZE; j++) {
                 Piece piece = board[i][j];
 
-                if (!piece.exists()) {
+                if (piece == null) {
                     emptyCount++;
                 } else {
                     if (emptyCount > 0) {
