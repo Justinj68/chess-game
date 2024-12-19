@@ -1,4 +1,7 @@
-package com.chessgame.backend.domain;
+package com.chessgame.backend.domain.board;
+
+import com.chessgame.backend.domain.enums.PieceType;
+import com.chessgame.backend.domain.enums.Team;
 
 public class Piece {
     private Team team;
@@ -94,10 +97,14 @@ public class Piece {
     }
 
     public boolean areSameTeam(Piece piece) {
-        if (piece.getTeam() == null) {
+        if (piece == null || piece.getTeam() == null) {
             return false;
         }
         return team.equals(piece.getTeam());
+    }
+
+    public boolean areSameTeam(Team team) {
+        return this.team == team;
     }
 
     public boolean isKing() {

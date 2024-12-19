@@ -1,24 +1,23 @@
-package com.chessgame.backend.domain;
+package com.chessgame.backend.domain.board;
 
 import java.util.EnumMap;
 import java.util.Map;
 
+import com.chessgame.backend.domain.enums.Team;
+import com.chessgame.backend.model.ChessGame;
+
 public class ChessBoard {
-    private Piece[][] board;
     public static final int SIZE = 8;
-    public static final String fenStart = "rnbqkbnr/PPPPPPPP/8/8/8/8/PPPPPPPP/RNBQKBNR";
+    
+    private Piece[][] board;
+    private ChessGame chessGame;
     private Map<Team, String> kingPositions;
 
-    public ChessBoard(String fen) {
+    public ChessBoard(ChessGame chessGame) {
+        this.chessGame = chessGame;
         this.board = new Piece[SIZE][SIZE];
         this.kingPositions = new EnumMap<>(Team.class);
-        initializeBoardFromFEN(fen);
-    }
-
-    public ChessBoard() {
-        this.board = new Piece[SIZE][SIZE];
-        this.kingPositions = new EnumMap<>(Team.class);
-        initializeBoardFromFEN(fenStart);
+        initializeBoardFromFEN(chessGame.getBoard());
     }
 
     private void initializeBoardFromFEN(String fen) {
@@ -43,7 +42,7 @@ public class ChessBoard {
     }
 
     public Piece getPiece(int row, int col) {
-        if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
+        if (isOutsideBoard(row, col)) {
             throw new IllegalArgumentException(String.format("Position outside the chessboard: (%d, %d)", row, col));
         }
         return board[row][col];
@@ -57,12 +56,16 @@ public class ChessBoard {
         if (isEmpty(startRow, startCol)) {
             throw new IllegalArgumentException(String.format("No piece to move at this position: (%d, %d)", startRow, startCol));
         }
-        Piece piece = getPiece(startRow, startCol);
+        Piece piece = board[startRow][startCol];
+        if (!piece.areSameTeam(chessGame.getTurn())) {
+            return;
+        }
         board[endRow][endCol] = piece;
         board[startRow][startCol] = null;
-        if (piece != null && piece.isKing()) {
+        if (piece.isKing()) {
             kingPositions.put(piece.getTeam(), coordinatesToPosition(endRow, endCol));
         }
+        updateGame();
     }
 
     public String toFEN() {
@@ -123,7 +126,7 @@ public class ChessBoard {
 
     @Override
     public ChessBoard clone() {
-        ChessBoard clonedBoard = new ChessBoard();
+        ChessBoard clonedBoard = new ChessBoard(chessGame.clone());
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 if (this.board[row][col] != null) {
@@ -139,5 +142,10 @@ public class ChessBoard {
 
     public String getKingPosition(Team team) {
         return kingPositions.get(team);
+    }
+
+    private void updateGame() {
+        chessGame.setBoard(toFEN());
+        chessGame.setTurn(chessGame.getTurn() == Team.WHITE ? Team.BLACK : Team.WHITE);
     }
 }

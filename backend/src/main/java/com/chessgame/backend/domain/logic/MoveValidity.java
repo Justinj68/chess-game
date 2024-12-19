@@ -1,10 +1,10 @@
-package com.chessgame.backend.service;
+package com.chessgame.backend.domain.logic;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.chessgame.backend.domain.ChessBoard;
-import com.chessgame.backend.domain.Piece;
+import com.chessgame.backend.domain.board.ChessBoard;
+import com.chessgame.backend.domain.board.Piece;
 
 public class MoveValidity {
     private final ChessBoard chessBoard;
@@ -74,13 +74,15 @@ public class MoveValidity {
             int currentCol = col + vector[1];
             while (!ChessBoard.isOutsideBoard(currentRow, currentCol)) {
                 Piece currentPiece = chessBoard.getPiece(currentRow, currentCol);
-                if (!canLegallyMoveTo(row, col, currentRow, currentCol)) {
+                if (piece.areSameTeam(currentPiece) || (currentPiece != null && currentPiece.isKing())) {
                     break;
                 }
-                if (currentPiece == null || (!piece.areSameTeam(currentPiece) && !currentPiece.isKing())) {
+
+                if (canLegallyMoveTo(row, col, currentRow, currentCol)) {
                     validMoves.add(coordinatesToPosition(currentRow, currentCol));
                 }
-                if (!chessBoard.isEmpty(currentRow, currentCol) || !isRay) {
+
+                if (currentPiece != null || !isRay) {
                     break;
                 }
                 currentRow += vector[0];

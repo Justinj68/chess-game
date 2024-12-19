@@ -37,9 +37,9 @@ function getPieceImage(piece) {
     return `./src/assets/pieces/${color}_${pieceType}.png`;
 }
 
-async function fetchPossiblesMoves(row, col, piece) {
+async function fetchPossiblesMoves(gameId, row, col, piece) {
     try {
-        const response = await axios.get('http://localhost:8080/api/moves', {
+        const response = await axios.get(`http://localhost:8080/api/game/${gameId}/moves`, {
             params: {
                 row: row,
                 col: col,
@@ -56,32 +56,33 @@ async function fetchPossiblesMoves(row, col, piece) {
     }
 }
 
-async function fetchBoard() {
+async function fetchBoard(gameId) {
     try {
-        const response = await axios.get('http://localhost:8080/api/board', {
+        const response = await axios.get(`http://localhost:8080/api/game/${gameId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
             withCredentials: true,
         });
-        return response.data;
+        return response.data.board;
     } catch (error) {
         console.error('Error while getting the game board:', error);
         return null;
     }
 }
 
-async function movePiece(oldRow, oldCol, newRow, newCol) {
+async function movePiece(gameId, row, col, newRow, newCol) {
     try {
-        const response = await axios.post('http://localhost:8080/api/move', null, {
+        const response = await axios.put(`http://localhost:8080/api/game/${gameId}/move`, null, {
             params: {
-                oldRow,
-                oldCol,
+                row,
+                col,
                 newRow,
                 newCol
             }
         });
-        const newFen = response.data; // La réponse est supposée être le FEN mis à jour
+        const newFen = response.data.board; // La réponse est supposée être le FEN mis à jour
+        console.log(response.data);
         if (newFen && typeof newFen === 'string') {
             return newFen;
         } else {
@@ -95,7 +96,7 @@ async function movePiece(oldRow, oldCol, newRow, newCol) {
 }
 
 
-function ChessBoard() {
+function ChessBoard({ gameId }) {
     const [fen, setFen] = useState("");
     const [chessBoard, setChessBoard] = useState([]);
     const [selectedPiece, setSelectedPiece] = useState(null);
@@ -106,7 +107,7 @@ function ChessBoard() {
     useEffect(() => {
         const loadBoard = async () => {
             setLoading(true);
-            const fetchedFen = await fetchBoard();
+            const fetchedFen = await fetchBoard(gameId);
             if (fetchedFen) {
                 setFen(fetchedFen);
                 setChessBoard(parseFEN(fetchedFen));
@@ -114,7 +115,7 @@ function ChessBoard() {
             setLoading(false);
         };
         loadBoard();
-    }, []);
+    }, [gameId]);
 
     // Sélectionner ou déplacer la pièce
     const handlePieceSelection = async (row, col) => {
@@ -124,7 +125,7 @@ function ChessBoard() {
         if (selectedPiece != null && possibleMoves.includes('' + row + col)) {
             try {
                 // Déplacer la pièce via le backend
-                const newFen = await movePiece(selectedPiece.row, selectedPiece.col, row, col);
+                const newFen = await movePiece(gameId, selectedPiece.row, selectedPiece.col, row, col);
                 setFen(newFen); // Mise à jour du FEN après le mouvement
                 setChessBoard(parseFEN(newFen)); // Mise à jour de l'échiquier
                 setSelectedPiece(null); // Désélectionner la pièce
@@ -136,7 +137,7 @@ function ChessBoard() {
             // Si une pièce est sélectionnée, afficher les coups possibles
             setSelectedPiece({ row, col });
             try {
-                const moves = await fetchPossiblesMoves(row, col, piece);
+                const moves = await fetchPossiblesMoves(gameId, row, col, piece);
                 setPossibleMoves(moves || []);
             } catch (error) {
                 console.error("Failed to fetch possible moves:", error);

@@ -1,19 +1,28 @@
 package com.chessgame.backend.service;
-import org.springframework.stereotype.Service;
-
-import com.chessgame.backend.domain.ChessBoard;
-import com.chessgame.backend.domain.Piece;
-
+import com.chessgame.backend.domain.board.ChessBoard;
+import com.chessgame.backend.domain.board.Piece;
+import com.chessgame.backend.domain.enums.GameStatus;
+import com.chessgame.backend.domain.logic.GameStatusUpdater;
+import com.chessgame.backend.domain.logic.MoveValidity;
+import com.chessgame.backend.model.ChessGame;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class ChessEngine {
+    private ChessGame chessGame;
     private ChessBoard chessBoard;
     private MoveValidity moveValidity;
+    private GameStatusUpdater gameStatusUpdater;
 
-    public ChessEngine() {
-        this.chessBoard = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    public ChessEngine() {}
+
+    public void initialize(ChessGame chessGame) {
+        this.chessGame = chessGame;
+        this.chessBoard = new ChessBoard(chessGame);
         this.moveValidity = new MoveValidity(chessBoard);
+        this.gameStatusUpdater = new GameStatusUpdater(chessGame, chessBoard, moveValidity);
     }
 
     public String getBoard() {
@@ -25,8 +34,9 @@ public class ChessEngine {
     }
 
     public String move(int oldRow, int oldCol, int newRow, int newCol) {
-        if (moveValidity.isMoveValid(oldRow, oldCol, newRow, newCol)) {
+        if (chessGame.getGameStatus() == GameStatus.IN_PROGRESS && moveValidity.isMoveValid(oldRow, oldCol, newRow, newCol)) {
             chessBoard.movePiece(oldRow, oldCol, newRow, newCol);
+            gameStatusUpdater.updateGameStatus();
         }
         return chessBoard.toFEN();
     }

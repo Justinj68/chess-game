@@ -1,37 +1,35 @@
-import './App.css'
+import './App.css';
 import ChessBoard from './components/ChessBoard';
 import { useState } from 'react';
-
+import axios from 'axios';
 
 function App() {
-  const [gameStarted, setGameStarted] = useState(false);
-  const handlePlayClick = () => {
-    setGameStarted(true);
+  const playerId = crypto.randomUUID();
+  console.log(playerId);
+  const [gameId, setGameId] = useState(null);
+
+  const handlePlayClick = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/api/play', {
+        playerId: playerId
+      });
+      setGameId(response.data.id);  // Récupère l'ID de la partie après sa création
+    } catch (error) {
+      console.error('Error creating a new game:', error);
+    }
   };
+  
 
   return (
     <div>
       <h1>Chess Game</h1>
-
-      {!gameStarted ?
-        (<button className="play-button" onClick={handlePlayClick}>PLAY</button>)
-        :
-        (<ChessBoard />)
-      }
-      
-      {/* <a 
-        href="https://github.com/Justinj68" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="github-link"
-      >
-        <img 
-          src="https://img.icons8.com/ios11/512/FFFFFF/github.png" 
-          alt="GitHub Logo"
-          className="github-logo"
-        />
-        <span>Justinj68</span>
-      </a> */}
+      {!gameId ? (
+        <button className="play-button" onClick={handlePlayClick}>
+          PLAY
+        </button>
+      ) : (
+        <ChessBoard gameId={gameId} />
+      )}
     </div>
   );
 }

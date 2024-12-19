@@ -1,11 +1,11 @@
-package com.chessgame.backend.service;
+package com.chessgame.backend.domain.logic;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.chessgame.backend.domain.ChessBoard;
-import com.chessgame.backend.domain.Piece;
-import com.chessgame.backend.domain.Team;
+import com.chessgame.backend.domain.board.ChessBoard;
+import com.chessgame.backend.domain.board.Piece;
+import com.chessgame.backend.domain.enums.Team;
 
 public class ControlMap {
     private final ChessBoard chessBoard;
