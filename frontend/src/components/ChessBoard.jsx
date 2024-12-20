@@ -81,20 +81,19 @@ async function movePiece(gameId, row, col, newRow, newCol) {
                 newCol
             }
         });
-        const newFen = response.data.board; // La réponse est supposée être le FEN mis à jour
+        const newFen = response.data.board;
         console.log(response.data);
         if (newFen && typeof newFen === 'string') {
             return newFen;
         } else {
             console.error("Invalid FEN received:", newFen);
-            return null; // Ou une valeur par défaut, comme un FEN initial valide
+            return null;
         }
     } catch (error) {
         console.error('Error while moving the piece:', error);
-        return null; // Si l'appel échoue, on renvoie null pour éviter de planter l'application
+        return null;
     }
 }
-
 
 function ChessBoard({ gameId }) {
     const [fen, setFen] = useState("");
@@ -114,27 +113,43 @@ function ChessBoard({ gameId }) {
             }
             setLoading(false);
         };
+
         loadBoard();
+
+        const socket = new WebSocket("ws://localhost:8080/ws?room=" + encodeURIComponent("GAME#" + gameId));
+
+        socket.onopen = () => {
+            console.log("WebSocket connection established.");
+        };
+        
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === "move") {
+                console.log("Mouvement reçu : ", data.data);
+                setFen(data.data.board);
+                setChessBoard(parseFEN(data.data.board));
+            }
+        };
+        
+        socket.onclose = () => {
+            console.log("WebSocket connection closed.");
+        };
     }, [gameId]);
 
-    // Sélectionner ou déplacer la pièce
     const handlePieceSelection = async (row, col) => {
         const piece = chessBoard[row][col];
 
-        // Si une pièce est déjà sélectionnée et qu'on clique sur une case valide
         if (selectedPiece != null && possibleMoves.includes('' + row + col)) {
             try {
-                // Déplacer la pièce via le backend
                 const newFen = await movePiece(gameId, selectedPiece.row, selectedPiece.col, row, col);
-                setFen(newFen); // Mise à jour du FEN après le mouvement
-                setChessBoard(parseFEN(newFen)); // Mise à jour de l'échiquier
-                setSelectedPiece(null); // Désélectionner la pièce
-                setPossibleMoves([]); // Effacer les cases possibles
+                setFen(newFen);
+                setChessBoard(parseFEN(newFen));
+                setSelectedPiece(null);
+                setPossibleMoves([])
             } catch (error) {
                 console.error('Error while moving the piece:', error);
             }
         } else if (piece !== "") {
-            // Si une pièce est sélectionnée, afficher les coups possibles
             setSelectedPiece({ row, col });
             try {
                 const moves = await fetchPossiblesMoves(gameId, row, col, piece);
@@ -144,13 +159,11 @@ function ChessBoard({ gameId }) {
                 setPossibleMoves([]);
             }
         } else {
-            // Si la case est vide ou la pièce est déjà sélectionnée, annuler la sélection
             setSelectedPiece(null);
             setPossibleMoves([]);
         }
     };
 
-    // Générez le tableau de l'échiquier
     const generateBoard = () => {
         let board = [];
         for (let row = 0; row < 8; row++) {
@@ -161,7 +174,7 @@ function ChessBoard({ gameId }) {
                 const highlighted = possibleMoves.some(
                     (move) => move === row.toString() + col.toString()
                 );
-    
+
                 rowCells.push(
                     <div
                         key={`${row}-${col}`}

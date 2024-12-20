@@ -17,16 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.chessgame.backend.model.ChessGame;
 import com.chessgame.backend.service.GameManagementService;
 import com.chessgame.backend.service.GamePlayService;
+import com.chessgame.backend.websocket.WebSocketServer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/api/game")
 public class GamePlayController {
 
+    private final WebSocketServer server;
     private static final Logger logger = LoggerFactory.getLogger(GamePlayController.class);
-
     private final GamePlayService gamePlayService;
-    public GamePlayController(GamePlayService gamePlayService, GameManagementService gameManagementService) {
+    
+    public GamePlayController(GamePlayService gamePlayService, GameManagementService gameManagementService, WebSocketServer server) {
         this.gamePlayService = gamePlayService;
+        this.server = server;
     }
 
     @GetMapping("/{gameId}")
@@ -60,10 +64,14 @@ public class GamePlayController {
             @RequestParam int newCol) {
         try {
             ChessGame newChessGame = gamePlayService.move(gameId, row, col, newRow, newCol);
+            String gameUpdateMessage = "{\"type\":\"move\",\"data\":" + new ObjectMapper().writeValueAsString(newChessGame) + "}";
+            server.broadcastToRoom("GAME#" + gameId, gameUpdateMessage);
+
             return ResponseEntity.status(HttpStatus.OK).body(newChessGame);
         } catch (Exception e) {
             logger.error("Error while trying to move piece for gameId={} from ({},{}) to ({},{}):", gameId, row, col, newRow, newCol, e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
 }

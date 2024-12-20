@@ -26,7 +26,7 @@ public class ChessGame {
     private Team turn;
 
     public ChessGame() {
-        this.board = "rnbqkbnr/8/8/8/8/8/8/RNBQKBNR";
+        this.board = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
         this.gameStatus = GameStatus.WAITING;
         this.turn = Team.WHITE;
         this.blackPlayerId = null;
