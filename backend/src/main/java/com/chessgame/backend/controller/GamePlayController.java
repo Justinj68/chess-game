@@ -43,11 +43,12 @@ public class GamePlayController {
     @GetMapping("/{gameId}/moves")
     public ResponseEntity<List<String>> getPossibleMoves(
             @PathVariable Long gameId,
+            @RequestParam String playerId,
             @RequestParam int row,
             @RequestParam int col,
             @RequestParam char piece) {
         try {
-            List<String> possibleMoves = gamePlayService.getPossibleMoves(gameId, row, col, piece);
+            List<String> possibleMoves = gamePlayService.getPossibleMoves(gameId, playerId, row, col, piece);
             return ResponseEntity.status(HttpStatus.OK).body(possibleMoves);
         } catch (Exception e) {
             logger.error("Error while getting possible moves for gameId={} row={} col={} piece={}", gameId, row, col, piece, e);
@@ -58,12 +59,13 @@ public class GamePlayController {
     @PutMapping("/{gameId}/move")
     public ResponseEntity<ChessGame> move(
             @PathVariable Long gameId,
+            @RequestParam String playerId,
             @RequestParam int row,
             @RequestParam int col,
             @RequestParam int newRow, 
             @RequestParam int newCol) {
         try {
-            ChessGame newChessGame = gamePlayService.move(gameId, row, col, newRow, newCol);
+            ChessGame newChessGame = gamePlayService.move(gameId, playerId, row, col, newRow, newCol);
             String gameUpdateMessage = "{\"type\":\"move\",\"data\":" + new ObjectMapper().writeValueAsString(newChessGame) + "}";
             server.broadcastToRoom("GAME#" + gameId, gameUpdateMessage);
 

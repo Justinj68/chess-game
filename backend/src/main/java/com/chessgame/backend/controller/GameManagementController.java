@@ -5,6 +5,7 @@ import com.chessgame.backend.service.GameManagementService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +26,12 @@ public class GameManagementController {
     }
 
     @PostMapping("/play")
-    public ResponseEntity<ChessGame> play(@RequestBody Map<String, String> request) {
-        String playerId = request.get("playerId");
+    public ResponseEntity<Map<String, Object>> play() {
+        String playerId = UUID.randomUUID().toString();
         try {
             ChessGame chessGame = gameManagementService.play(playerId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(chessGame);
+            Map<String, Object> response = Map.of("gameId", chessGame.getId(), "playerId", playerId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             logger.error("Internal server error while finding a game for playerId: {}", playerId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

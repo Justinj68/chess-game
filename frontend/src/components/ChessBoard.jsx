@@ -44,6 +44,7 @@ async function fetchPossiblesMoves(gameId, row, col, piece) {
                 row: row,
                 col: col,
                 piece: piece,
+                playerId: localStorage.getItem('playerId'),
             },
             headers: {
                 'Content-Type': 'application/json',
@@ -78,8 +79,9 @@ async function movePiece(gameId, row, col, newRow, newCol) {
                 row,
                 col,
                 newRow,
-                newCol
-            }
+                newCol,
+                playerId: localStorage.getItem('playerId'),
+            },
         });
         const newFen = response.data.board;
         console.log(response.data);
@@ -166,10 +168,10 @@ function ChessBoard({ gameId }) {
 
     const generateBoard = () => {
         let board = [];
-        for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
             let rowCells = [];
-            for (let col = 0; col < 8; col++) {
-                const isWhite = (row + col) % 2 === 0;
+            for (let row = 0; row < 8; row++) {
+                const isBlack = (row + col) % 2 === 0;
                 const piece = chessBoard[row][col];
                 const highlighted = possibleMoves.some(
                     (move) => move === row.toString() + col.toString()
@@ -179,7 +181,7 @@ function ChessBoard({ gameId }) {
                     <div
                         key={`${row}-${col}`}
                         className={`square 
-                            ${isWhite ? 'white' : 'black'} 
+                            ${isBlack ? 'black' : 'white'} 
                             ${selectedPiece && selectedPiece.row === row && selectedPiece.col === col ? 'selected' : ''} 
                             ${highlighted ? 'highlighted' : ''}`}
                         onMouseDown={() => handlePieceSelection(row, col)}
@@ -195,7 +197,7 @@ function ChessBoard({ gameId }) {
                 );
             }
             board.push(
-                <div key={row} className="row">
+                <div key={col} className="row">
                     {rowCells}
                 </div>
             );

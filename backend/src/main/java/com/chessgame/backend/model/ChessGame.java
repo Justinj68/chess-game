@@ -26,7 +26,7 @@ public class ChessGame {
     private Team turn;
 
     public ChessGame() {
-        this.board = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+        this.board = "rnbkqbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBKQBNR";
         this.gameStatus = GameStatus.WAITING;
         this.turn = Team.WHITE;
         this.blackPlayerId = null;
@@ -38,6 +38,16 @@ public class ChessGame {
         this.board = board;
         this.gameStatus = gameStatus;
         this.turn = turn;
+    }
+
+    public Team getPlayerTeam(String playerId) {
+        if (playerId.equals(whitePlayerId)) {
+            return Team.WHITE;
+        }
+        if (playerId.equals(blackPlayerId)) {
+            return Team.BLACK;
+        }
+        return null;
     }
 
     @Override

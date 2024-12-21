@@ -4,16 +4,13 @@ import { useState } from 'react';
 import axios from 'axios';
 
 function App() {
-  const playerId = crypto.randomUUID();
-  console.log(playerId);
   const [gameId, setGameId] = useState(null);
 
   const handlePlayClick = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/play', {
-        playerId: playerId
-      });
-      setGameId(response.data.id);  // Récupère l'ID de la partie après sa création
+      const response = await axios.post('http://localhost:8080/api/play');
+      localStorage.setItem("playerId", response.data.playerId);
+      setGameId(response.data.gameId);
     } catch (error) {
       console.error('Error creating a new game:', error);
     }

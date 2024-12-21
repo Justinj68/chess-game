@@ -11,13 +11,11 @@ import com.chessgame.backend.model.ChessGame;
 public class GameStatusUpdater {
     private final ChessGame chessGame;
     private final ChessBoard chessBoard;
-    private final ControlMap controlMap;
     private final MoveValidity moveValidity;
 
     public GameStatusUpdater(ChessGame chessGame, ChessBoard chessBoard, MoveValidity moveValidity) {
         this.chessGame = chessGame;
         this.chessBoard = chessBoard;
-        this.controlMap = new ControlMap(chessBoard);
         this.moveValidity = moveValidity;
     }
 
@@ -45,6 +43,7 @@ public class GameStatusUpdater {
         int row = ChessBoard.positionToRow(kingPosition);
         int col = ChessBoard.positionToCol(kingPosition);
 
+        ControlMap controlMap = new ControlMap(chessBoard);
         return controlMap.isControlledBy(row, col, enemyTeam);
     }
 

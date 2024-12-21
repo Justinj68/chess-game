@@ -37,20 +37,20 @@ public class GameManagementService {
         String blackPlayerId = chessGame.getBlackPlayerId();
         if (whitePlayerId == null) {
             if (playerId.equals(blackPlayerId)) {
-                throw new Exception("Player #" + playerId + " is already is the game #" + gameId);
+                throw new Exception("Player #" + playerId + " is already in the game #" + gameId + " as Black team.");
             }
             chessGame.setWhitePlayerId(playerId);
             chessGame.setGameStatus(GameStatus.IN_PROGRESS);
             return chessGameRepository.save(chessGame);
         } else if (blackPlayerId == null) {
             if (playerId.equals(whitePlayerId)) {
-                throw new Exception("Player #" + playerId + " is already is the game #" + gameId);
+                throw new Exception("Player #" + playerId + " is already in the game #" + gameId + " as White team.");
             }
             chessGame.setBlackPlayerId(playerId);
             chessGame.setGameStatus(GameStatus.IN_PROGRESS);
             return chessGameRepository.save(chessGame);
         } else {
-            throw new Exception("Game with ID =" + gameId + " is already full. Player " + playerId + " cannot join.");
+            throw new Exception("Game #" + gameId + " is already full. Player #" + playerId + " cannot join.");
         }
     }
     

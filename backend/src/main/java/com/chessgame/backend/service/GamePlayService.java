@@ -1,12 +1,14 @@
 package com.chessgame.backend.service;
 
 import com.chessgame.backend.domain.board.Piece;
+import com.chessgame.backend.domain.enums.Team;
 import com.chessgame.backend.model.ChessGame;
 import com.chessgame.backend.repository.ChessGameRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,16 +39,24 @@ public class GamePlayService {
             });
     }
 
-    public List<String> getPossibleMoves(Long gameId, int row, int col, char piece) {
+    public List<String> getPossibleMoves(Long gameId, String playerId, int row, int col, char piece) {
         ChessGame chessGame = getGame(gameId);
+        Piece chessPiece = new Piece(piece);
+        Team playerTeam = chessGame.getPlayerTeam(playerId);
+        if (!chessPiece.getTeam().equals(playerTeam)) {
+            return new ArrayList<>();
+        }
         chessEngine.initialize(chessGame);
         List<String> possibleMoves = chessEngine.getValidMoves(row, col, new Piece(piece));
         logger.info("Possible moves for piece {} at ({}, {}): {}", piece, row, col, possibleMoves);
         return possibleMoves;
     }
 
-    public ChessGame move(Long gameId, int row, int col, int newRow, int newCol) {
+    public ChessGame move(Long gameId, String playerId, int row, int col, int newRow, int newCol) {
         ChessGame chessGame = getGame(gameId);
+        if (!chessGame.getPlayerTeam(playerId).equals(chessGame.getTurn())) {
+            return chessGame;
+        }
         chessEngine.initialize(chessGame);
         chessEngine.move(row, col, newRow, newCol);
         ChessGame newChessGame = chessGameRepository.save(chessGame);
