@@ -34,7 +34,7 @@ function getPieceImage(piece) {
     };
     const color = piece === piece.toUpperCase() ? 'white' : 'black';
     const pieceType = pieceMap[piece.toLowerCase()];
-    return `./src/assets/pieces/${color}_${pieceType}.png`;
+    return `../src/assets/pieces/${color}_${pieceType}.png`;
 }
 
 async function fetchPossiblesMoves(gameId, row, col, piece) {
